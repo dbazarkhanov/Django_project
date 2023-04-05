@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Register</title>
+</head>
+<body>
+<div class="container">
+    <hr>
+    <img style="width:60px;margin-bottom:50px; margin-left: -60px;" src = "{% static '/media/logo.png' %}" alt="fvsv">
+  <h1>Register Form</h1>
+  <hr>
+  <form action="{% url 'user:register' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+      <hr>
+      <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+</div>
+</body>
+</html>
