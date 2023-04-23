@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <title>Register</title>
+</head>
+<body style="background-color:grey;">
+  <div class="container">
+    <h1>Объявление о продаже {{ poll.user.username }} {{BASE_DIR}}</h1>
+    <div class="row">
+    {% for poll in polls %}
+      <div class="col-md-6">
+        <img src="{{ poll.currency.image.url }}" alt="{{ poll.currency.name }}" class="img-fluid">
+        <h2>{{ poll.currency.name }}</h2>
+        <p>{{ poll.currency.symbol }} {{ poll.currency.price }}</p>
+      </div>
+      <div class="col-md-6">
+        <p>{{ poll.user.username }} продает {{ poll.quantity }} {{ poll.currency.symbol }} за {{ poll.sum }} USD</p>
+        <p>Создано {{ poll.created_timestamp }}</p>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+</body>
