@@ -1,4 +1,7 @@
 from django.db import models
+from django.http import JsonResponse
+from requests import Session
+import json
 from app.secrets import API_KEY
 import sys
 sys.path.append('/Users/Dell/Desktop/KBTU/django/project/user')
@@ -46,3 +49,41 @@ class Poll(models.Model):
 
     def sum(self):
         return self.currency.price * self.quantity
+    
+class CMC(models.Model):
+    def __init__(self, token):
+        self.apiUrl = 'https://pro-api.coinmarketcap.com'
+        self.headers = {
+              'Accepts': 'application/json',
+              'X-CMC_PRO_API_KEY': token,
+            }
+        self.session = Session()
+        self.session.headers.update(self.headers)
+
+    def getAllCoins(self):
+        parameters = {
+            'start': '1',
+            'limit': '25'
+        }
+        url = self.apiUrl + '/v1/cryptocurrency/listings/latest'
+        response = self.session.get(url, params=parameters)
+        data = json.loads(response.text)['data']
+        return JsonResponse(data, safe=False)
+
+    def getCoinMetadata(self, id):
+        parameters = {
+            'id': id
+        }
+        url = self.apiUrl + '/v2/cryptocurrency/info'
+        response = self.session.get(url, params=parameters)
+        data = json.loads(response.text)['data'][str(id)]
+        return JsonResponse(data, safe=False)
+
+    def getCoinDetails(self, id):
+        parameters = {
+            'id': id
+        }
+        url = self.apiUrl + '/v2/cryptocurrency/quotes/latest'
+        response = self.session.get(url, params=parameters)
+        data = json.loads(response.text)['data'][str(id)]
+        return JsonResponse(data, safe=False)
