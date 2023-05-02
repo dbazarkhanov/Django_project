@@ -13,7 +13,7 @@ from django.db import models
 class Currency(models.Model):
     name = models.CharField(null=True, max_length=100)
     symbol = models.CharField(null=True, max_length=100)
-    image = models.ImageField(upload_to='media/', max_length=254, default='')
+    image = models.ImageField(upload_to='media/currency/', max_length=254, default='')
     price = models.FloatField(default=0)
 
 

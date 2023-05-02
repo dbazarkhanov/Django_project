@@ -2,7 +2,7 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
-from .forms import UserRegisterForm, UserLoginForm
+from .forms import UserRegisterForm, UserLoginForm, UserProfileForm
 # from rest_framework import generics
 # from .models import User
 # from .serializers import UserSerializer
@@ -37,6 +37,19 @@ def login(request):
     context = {'form': form}
     return render(request, 'user/login.html', context)
 
+
+# @login_required
+def profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(instance=request.user, data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('user:profile'))
+    else:
+        form = UserProfileForm(instance=request.user)
+
+    context = {'form': form,}
+    return render(request, 'user/profile.html', context)
 
 # class UserList(generics.ListAPIView):
 #     queryset = User.objects.all()

@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-identity">
+            <img src="/media/1.png" alt="logo">
+            <h1><a href="#">CryptoTracker</a></h1>
+        </div>
+        <nav class="site-navigation">
+            <ul class="nav">
+                <li><a href="/user/login">Sign in</a></li>
+                <li><a href="#">Get Started</a></li>
+            
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="first">
+            <h1>Track your crypto portfolio and taxes</h1>
+            <p>Accurately tracking cryptocurrency investment performance and taxes is hard. We make it easy and help you save money.</p>
+            <button>Get Started Today</button>
+        </div>
+        <div class="second">
+            <img src="/media/ompp.png" alt="">
+        </div>
+    </div>
+</body>
+</html>

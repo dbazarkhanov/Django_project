@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Currency, Balance, Transaction, Poll
+from .models import *
 
 
 class CurrencySerializer(serializers.ModelSerializer):
