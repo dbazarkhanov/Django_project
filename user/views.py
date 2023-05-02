@@ -1,5 +1,5 @@
 from django.contrib import auth
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from .forms import UserRegisterForm, UserLoginForm, UserProfileForm
@@ -31,7 +31,7 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
-                return HttpResponse('WORKS')
+                return HttpResponseRedirect(reverse('app:main'))
     else:
         form = UserLoginForm()
     context = {'form': form}
