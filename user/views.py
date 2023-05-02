@@ -2,6 +2,7 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserLoginForm, UserProfileForm
 # from rest_framework import generics
 # from .models import User
@@ -38,7 +39,7 @@ def login(request):
     return render(request, 'user/login.html', context)
 
 
-# @login_required
+@login_required
 def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(instance=request.user, data=request.POST, files=request.FILES)

@@ -5,84 +5,54 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Offers</title>
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
     <link rel="stylesheet" href="{% static 'css/offers.css' %}">
 </head>
 <body>
     <header class="site-header">
         <div class="site-identity">
-            <img src="/media/1.png" alt="logo">
-            <h1><a href="#">CryptoTracker</a></h1>
+            <img src="/media/logo.png" alt="logo">
+            <h1><a href="/app/main">CryptoTracker</a></h1>
         </div>
         <nav class="site-navigation">
             <ul class="nav">
                 <li><a href="/app/offers">Offers</a></li>
                 <li><a href="/user/profile">Portfolio</a></li>
                 <li><a href="#">Currencies</a></li>
-                <li><a href="/user/login">Log out</a></li>
+                <li><a href="/user/logout">Log out</a></li>
             </ul>
         </nav>
     </header>
 
     <div id="wrapper">
 
-        
         <table id="keywords" cellspacing="0" cellpadding="0">
           <thead>
             <tr>
-                <th><span>ID</span></th>
-                <th><span>Name</span></th>
-                <th><span>Symbol</span></th>
+                <th><span>User</span></th>
+                <th><span>Currency</span></th>
+                <th><span>Quantity</span></th>
                 <th><span>Price</span></th>
                 <th><span>Time</span></th>
             </tr>
           </thead>
           <tbody>
+            {% for poll in polls %}
             <tr>
-              <td class="lalign">silly tshirts</td>
-              <td>6,000</td>
-              <td>110</td>
-              <td>1.8%</td>
-              <td>22.2</td>
+              <td class="lalign">{{ poll.user.username }}</td>
+              <td>{{ poll.currency.name }}</td>
+              <td>{{ poll.quantity }}</td>
+              <td>{{ poll.sum }}</td>
+              <td>{{ poll.created_timestamp }}</td>
             </tr>
+            {% empty %}
             <tr>
-              <td class="lalign">desktop workspace photos</td>
-              <td>2,200</td>
-              <td>500</td>
-              <td>22%</td>
-              <td>8.9</td>
+              <td colspan="5">No offers found.</td>
             </tr>
-            <tr>
-              <td class="lalign">arrested development quotes</td>
-              <td>13,500</td>
-              <td>900</td>
-              <td>6.7%</td>
-              <td>12.0</td>
-            </tr>
-            <tr>
-              <td class="lalign">popular web series</td>
-              <td>8,700</td>
-              <td>350</td>
-              <td>4%</td>
-              <td>7.0</td>
-            </tr>
-            <tr>
-              <td class="lalign">2013 webapps</td>
-              <td>9,900</td>
-              <td>460</td>
-              <td>4.6%</td>
-              <td>11.5</td>
-            </tr>
-            <tr>
-              <td class="lalign">ring bananaphone</td>
-              <td>10,500</td>
-              <td>748</td>
-              <td>7.1%</td>
-              <td>17.3</td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
-       </div> 
+    </div>
 </body>
 </html>

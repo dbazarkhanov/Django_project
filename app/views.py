@@ -46,7 +46,7 @@ class PollList(generics.ListAPIView):
 
     def get(self, request):
         polls = self.get_queryset()
-        return render(request, 'header.html', {'polls': polls})
+        return render(request, 'offers.html', {'polls': polls})
 
 class PollDetail(generics.RetrieveAPIView):
     queryset = Poll.objects.all()
