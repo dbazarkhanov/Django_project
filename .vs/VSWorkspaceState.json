@@ -3,14 +3,10 @@
     "",
     "\\app",
     "\\app\\static",
-    "\\app\\static\\css",
     "\\app\\templates",
-    "\\app\\templates\\crypt",
     "\\user",
-    "\\user\\migrations",
-    "\\user\\static\\media",
-    "\\user\\templates\\user"
+    "\\user\\migrations"
   ],
-  "SelectedNode": "\\app\\urls.py",
+  "SelectedNode": "\\app\\templates\\images",
   "PreviewInSolutionExplorer": false
 }
