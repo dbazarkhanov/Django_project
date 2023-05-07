@@ -1,58 +1,85 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offers</title>
-    <link rel="stylesheet" href="{% static 'css/header.css' %}">
-    <link rel="stylesheet" href="{% static 'css/offers.css' %}">
+    <title>Document</title>
+    <script
+    src="https://kit.fontawesome.com/1935d064dd.js"
+    crossorigin="anonymous"
+  ></script>
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="offers.css">
 </head>
 <body>
     <header class="site-header">
         <div class="site-identity">
-            <img src="/media/logo.png" alt="logo">
-            <h1><a href="/app/main">CryptoTracker</a></h1>
+            <img src="images/1.png" alt="logo">
+            <h1><a href="#">CryptoTracker</a></h1>
         </div>
         <nav class="site-navigation">
             <ul class="nav">
-                <li><a href="/app/offers">Offers</a></li>
-                <li><a href="/user/profile">Portfolio</a></li>
+                <li><a href="#">Offers</a></li>
+                <li><a href="#">Portfolio</a></li>
                 <li><a href="#">Currencies</a></li>
-                <li><a href="/user/logout">Log out</a></li>
+                <li><a href="#">Log out</a></li>
             </ul>
         </nav>
     </header>
 
-    <div id="wrapper">
+    <div class="cont">
+      <table>
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Quantity</td>
+                <td>Price</td>
+                <td>Time</td>
+                <td>To buy</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>35t35</td>
+                <td>BNB</td>
+                <td>1</td>
+                <td>469</td>
+                <td>13:45</td>
+                <td><button class="first">Buy</button></td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
 
-        <table id="keywords" cellspacing="0" cellpadding="0">
-          <thead>
-            <tr>
-                <th><span>User</span></th>
-                <th><span>Currency</span></th>
-                <th><span>Quantity</span></th>
-                <th><span>Price</span></th>
-                <th><span>Time</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for poll in polls %}
-            <tr>
-              <td class="lalign">{{ poll.user.username }}</td>
-              <td>{{ poll.currency.name }}</td>
-              <td>{{ poll.quantity }}</td>
-              <td>{{ poll.sum }}</td>
-              <td>{{ poll.created_timestamp }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-              <td colspan="5">No offers found.</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+  <div class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="left">
+        <h2>35t35</h2>
+        <p>Price: 469</p>
+        <p>Available: 1726.00$</p>
+        <p>Payment Time Limit: 15 minutes</p>
+      </div>
+      <div class="right">
+        <form action="#">
+            <div class="input-box">
+                <label class="labels">I want to pay</label>
+                <input type="text" placeholder="300,000.00 - 1,000,000.00" required>
+            </div>
+            <div class="input-box">
+                <label class="labels">I will receive</label>
+                <input type="text" placeholder="0.00" required>
+            </div>
+          </form>
+      </div>
+      <div class="buy">
+        <button class="first">Buy USDt</button>
+      </div>
     </div>
+  </div>
+
+  <script src="offers.js"></script>
 </body>
 </html>
