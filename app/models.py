@@ -14,7 +14,7 @@ class Currency(models.Model):
     name = models.CharField(null=True, max_length=100)
     symbol = models.CharField(null=True, max_length=100)
     image = models.ImageField(upload_to='media/', max_length=254, default='')
-    price = models.FloatField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
 '''
 class Balance(models.Model):
@@ -78,12 +78,14 @@ class CMC(models.Model):
     def getAllCoins(self):
         parameters = {
             'start': '1',
-            'limit': '25'
+            'limit': '25',
+            'convert': 'KZT',
         }
         url = self.apiUrl + '/v1/cryptocurrency/listings/latest'
         response = self.session.get(url, params=parameters)
         data = json.loads(response.text)['data']
-        return JsonResponse(data, safe=False)
+        
+        return data
 
     def getCoinMetadata(self, id):
         parameters = {
@@ -92,7 +94,8 @@ class CMC(models.Model):
         url = self.apiUrl + '/v2/cryptocurrency/info'
         response = self.session.get(url, params=parameters)
         data = json.loads(response.text)['data'][str(id)]
-        return JsonResponse(data, safe=False)
+
+        return data
 
     def getCoinDetails(self, id):
         parameters = {
@@ -101,4 +104,5 @@ class CMC(models.Model):
         url = self.apiUrl + '/v2/cryptocurrency/quotes/latest'
         response = self.session.get(url, params=parameters)
         data = json.loads(response.text)['data'][str(id)]
-        return JsonResponse(data, safe=False)
+        
+        return data
