@@ -9,20 +9,15 @@ import datetime
 
 # Create your views here.
 
-# def index(request):
-#     context = {
-#         'title': 'app',
-#         'polls': Poll.objects.all(),
-#     }
-#     return render(request, 'app/index.html', context)
-
-class CurrencyList(generics.ListAPIView):
-    queryset = Currency.objects.all()
-    serializer_class = CurrencySerializer
-    
-    # def get(self, request):
-    #     currencies = self.get_queryset()
-    #     return render(request, 'currency_list.html', {'currencies': currencies})
+class CurrencyList(APIView):
+    def put(self, request, id):
+        currency = Currency.objects.get()
+        serializer = CurrencySerializer(currency, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+        
 
 class CurrencyDetail(generics.RetrieveAPIView):
     queryset = Currency.objects.all()
