@@ -31,7 +31,7 @@ class CurrencyList(APIView):
         return JsonResponse(serializer.data, safe=False)
 
 
-class asa(APIView):
+class CurrencyView(APIView):
     def get(self, request):
         coins_data = CMC(API_KEY).getAllCoins()
         currencies = []
