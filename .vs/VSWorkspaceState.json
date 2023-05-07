@@ -2,11 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\app",
-    "\\app\\static",
-    "\\app\\templates",
-    "\\user",
-    "\\user\\migrations"
+    "\\user"
   ],
-  "SelectedNode": "\\app\\templates\\images",
   "PreviewInSolutionExplorer": false
 }
