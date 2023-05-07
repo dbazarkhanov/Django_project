@@ -9,13 +9,6 @@ import datetime
 
 # Create your views here.
 
-# def index(request):
-#     context = {
-#         'title': 'app',
-#         'polls': Poll.objects.all(),
-#     }
-#     return render(request, 'app/index.html', context)
-
 class CurrencyList(generics.ListAPIView):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
@@ -60,7 +53,7 @@ class TransactionDetail(generics.RetrieveAPIView):
 
 
 class BuyHandler(APIView):
-    #в дате должно быть poll, quantity сколько покупает
+    #РІ РґР°С‚Рµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ poll, quantity СЃРєРѕР»СЊРєРѕ РїРѕРєСѓРїР°РµС‚
     def post(self, request):
         data = request.data
         poll = data["poll"]
@@ -150,7 +143,7 @@ class BuyHandler(APIView):
         return Response(serializer.errors)
 
 class SellHandler(APIView):
-    # в дате должно быть quantity, wallet element, price
+    # РІ РґР°С‚Рµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ quantity, wallet element, price
     def post(self, request):
         data = request.data
         user = request.user

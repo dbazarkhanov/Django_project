@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+body {
+    font-family: "Open Sans", sans-serif;
+    margin: 0;
+    background-color: #f8f9fe;
+    height: 1000px;
+}
+
+header{
+    background-color: white;
+    box-shadow: 0 5px 10px rgba(96, 157, 255, 0.2);
+    margin-bottom: 100px;
+}
+
+header img{
+    float: left;    
+    width:40px;
+    margin: 14px 15px 0 5px;
+}
+
+a {
+    text-decoration: none;
+    color: #1a91fe;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+a:hover {
+    color: rgb(179, 179, 179);
+}
+.site-header {
+    border-bottom: 1px solid #ccc;
+    padding: 0.5em 1em;
+    display: flex;
+    justify-content: space-between;
+}
+.site-identity h1 {
+    font-size: 2em;
+    margin: 0.3em 0;
+    display: inline-block;
+}
+.site-navigation ul,
+.site-navigation li {
+    margin: 0;
+    padding: 0;
+}
+.site-navigation li {
+    display: inline-block;
+    margin: 1.4em 3em 1em 1em;
+}

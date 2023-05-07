@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Transaction, Currency, Poll, WalletElement
+from .models import *
 # Register your models here.
 
 class TransactionAdmin(admin.ModelAdmin):
