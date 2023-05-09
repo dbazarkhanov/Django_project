@@ -1,34 +1,68 @@
 from django.shortcuts import render
-from rest_framework.permissions import IsAuthenticated
-from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .serializers import *
+from .models import *
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import math
 import datetime
-from django.forms.models import model_to_dict
-
-
+from rest_framework.renderers import TemplateHTMLRenderer
 # Create your views here.
 
-class CurrencyList(generics.ListAPIView):
-    queryset = Currency.objects.all()
-    serializer_class = CurrencySerializer
-    
-    # def get(self, request):
-    #     currencies = self.get_queryset()
-    #     return render(request, 'currency_list.html', {'currencies': currencies})
+class CurrencyList(APIView):
+    def get(self, request):
+        coins_data = CMC(API_KEY).getAllCoins()
+        currencies = []
+
+        for coin in coins_data:
+            currency, created = Currency.objects.update_or_create(
+                symbol=coin['symbol'],
+                defaults={
+                    'name': coin['name'],
+                    'price': coin['quote']['KZT']['price'],
+                    # 'percent_change_1h': coin['quote']['KZT']['percent_change_1h'],
+                    # 'percent_change_24h': coin['quote']['KZT']['percent_change_24h'],
+                }
+            )
+            currencies.append(currency)
+
+        serializer = CurrencySerializer(currencies, many=True)
+
+        return JsonResponse(serializer.data, safe=False)
+
+
+class CurrencyView(APIView):
+    def get(self, request):
+        coins_data = CMC(API_KEY).getAllCoins()
+        currencies = []
+
+        for coin in coins_data:
+            currency, created = Currency.objects.update_or_create(
+                symbol=coin['symbol'],
+                defaults={
+                    'name': coin['name'],
+                    'price': coin['quote']['KZT']['price'],
+                    # 'percent_change_1h': coin['quote']['KZT']['percent_change_1h'],
+                    # 'percent_change_24h': coin['quote']['KZT']['percent_change_24h'],
+                }
+            )
+            currencies.append(currency)
+
+        serializer = CurrencySerializer(currencies, many=True)
+
+        return render(request, 'currency_list.html', {'currencies': serializer.data})
+
 
 class CurrencyDetail(generics.RetrieveAPIView):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
 
-    def get(self, request):
-        currency_details = self.get_queryset()
-        return render(request, 'currency_list.html', {'currencies': currency_details})
+    def get(self, request, id):
+        data = CMC(API_KEY).getCoinDetails(id)
+        serializer = CurrencySerializer(data)
 
+        return Response(serializer.data)
 '''
 class BalanceList(generics.ListAPIView):
     queryset = Balance.objects.all()

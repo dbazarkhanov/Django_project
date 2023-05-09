@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html
 <html>
 <head>
     <title>Currency List</title>
@@ -19,19 +19,54 @@
             background-color: #f2f2f2;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Функция для обновления данных
+            function updateData() {
+                // Выполнение AJAX-запроса
+                $.ajax({
+                    url: "/api/currencies/",
+                    type: "GET",
+                    success: function(data) {
+                        console.log(data);
+                        // Обработка полученных данных
+                        var tableBody = $("#currency-table-body");
+                        tableBody.empty();
+    
+                        $.each(data, function(index, currency) {
+                            var row = $("<tr></tr>");
+                            row.append($("<td></td>").text(currency.name));
+                            row.append($("<td></td>").text(currency.symbol));
+                            row.append($("<td></td>").text(currency.price));
+                            tableBody.append(row);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+    
+            // Обновление данных каждую секунду
+            setInterval(updateData, 5000);
+        });
+    </script>
+    
 </head>
 <body>
     <h1>Currency List</h1>
     <table id="currency-table">
-        {% for currency in currencies %}
+        <thead>
             <tr>
-                <td>{{ currency.name }}</td>
-                <td>{{ currency.symbol }}</td>
-                <td>{{ currency.price }} KZT</td>
-                <td>{{ currency.percent_change_1h }}</td>
-                <td>{{ currency.percent_change_24h }}</td>
+                <th>Name</th>
+                <th>Symbol</th>
+                <th>Price</th>
             </tr>
-        {% endfor %}
+        </thead>
+        <tbody id="currency-table-body">
+            <!-- Data will be populated dynamically by JavaScript -->
+        </tbody>
     </table>
 </body>
 </html>
