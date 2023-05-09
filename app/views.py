@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from rest_framework.permissions import IsAuthenticated
+from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .serializers import *
 from rest_framework import generics
@@ -6,6 +8,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import math
 import datetime
+from django.forms.models import model_to_dict
+
 
 # Create your views here.
 
@@ -53,13 +57,36 @@ class TransactionDetail(generics.RetrieveAPIView):
 
 
 class BuyHandler(APIView):
-    #в дате должно быть poll, quantity сколько покупает
     def post(self, request):
         data = request.data
-        poll = data["poll"]
+        pollId = data["pollId"]
         buyer = request.user
+        poll = Poll.objects.get(id=pollId)
+
+        currencyToDict = model_to_dict(poll.currency)
+        userToDict = model_to_dict(poll.user)
+
+        '''
+        currencyToDict = {
+            "id": poll.currency.id,
+            "name": poll.currency.name,
+            "symbol": poll.currency.symbol,
+            "price": poll.currency.price,
+            "image": poll.currency.image
+            }
+        '''
+
+        dataToSerialize = {
+            "id": poll.id,
+            "user": userToDict,
+            "price": poll.price,
+            "quantity": poll.quantity,
+            "currency": currencyToDict,
+            "created_timestamp": poll.created_timestamp
+            }
+
         seller = poll.user
-        serializer = PollSerializer(data=data)
+        serializer = PollSerializer(data=dataToSerialize)
 
         if serializer.is_valid():
             quantity = poll.quantity
@@ -186,7 +213,8 @@ class PollList(generics.ListAPIView):
 
     def get(self, request):
         polls = self.get_queryset()
-        return render(request, 'offers.html', {'polls': polls})
+        serializer = PollSerializer(polls, many=True)
+        return render(request, 'offers.html', {'polls': serializer.data})
 
 
 class PollDetail(generics.RetrieveAPIView):

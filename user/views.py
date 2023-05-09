@@ -19,7 +19,7 @@ def register(request):
     else:
         form = UserRegisterForm()
     context = {'form': form}
-    return render(request, 'user/register.html', context)
+    return render(request, 'register.html', context)
 
 
 def login(request):
@@ -36,7 +36,7 @@ def login(request):
     else:
         form = UserLoginForm()
     context = {'form': form}
-    return render(request, 'user/login.html', context)
+    return render(request, 'login.html', context)
 
 
 @login_required
@@ -50,7 +50,7 @@ def profile(request):
         form = UserProfileForm(instance=request.user)
 
     context = {'form': form,}
-    return render(request, 'user/profile.html', context)
+    return render(request, 'profile.html', context)
 
 # class UserList(generics.ListAPIView):
 #     queryset = User.objects.all()

@@ -38,9 +38,6 @@ class WalletElement(models.Model):
         return f"Элемент кошелька {self.user.username}, валюта {self.currency.name}"
 
 
-
-    
-
 #Stores historical data (all transactions of all users)
 class Transaction(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='user')
