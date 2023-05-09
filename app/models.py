@@ -14,7 +14,7 @@ class Currency(models.Model):
     name = models.CharField(null=True, max_length=100)
     symbol = models.CharField(null=True, max_length=100)
     image = models.ImageField(upload_to='media/', max_length=254, default='')
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.FloatField(default=0)
 
 '''
 class Balance(models.Model):
@@ -52,7 +52,7 @@ class Transaction(models.Model):
 class Poll(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     currency = models.ForeignKey(to=Currency, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=0)
+    quantity = models.FloatField(default=0)
     price = models.FloatField(default=0)
     created_timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -75,14 +75,12 @@ class CMC(models.Model):
     def getAllCoins(self):
         parameters = {
             'start': '1',
-            'limit': '25',
-            'convert': 'KZT',
+            'limit': '25'
         }
         url = self.apiUrl + '/v1/cryptocurrency/listings/latest'
         response = self.session.get(url, params=parameters)
         data = json.loads(response.text)['data']
-        
-        return data
+        return JsonResponse(data, safe=False)
 
     def getCoinMetadata(self, id):
         parameters = {
@@ -91,8 +89,7 @@ class CMC(models.Model):
         url = self.apiUrl + '/v2/cryptocurrency/info'
         response = self.session.get(url, params=parameters)
         data = json.loads(response.text)['data'][str(id)]
-
-        return data
+        return JsonResponse(data, safe=False)
 
     def getCoinDetails(self, id):
         parameters = {
@@ -101,5 +98,4 @@ class CMC(models.Model):
         url = self.apiUrl + '/v2/cryptocurrency/quotes/latest'
         response = self.session.get(url, params=parameters)
         data = json.loads(response.text)['data'][str(id)]
-        
-        return data
+        return JsonResponse(data, safe=False)

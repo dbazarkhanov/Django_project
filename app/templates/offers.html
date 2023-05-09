@@ -77,13 +77,15 @@
                 <input type="number" class="toGetQuantity" required step="0.00001"> 
             </div>
           </form>
+          <h4 class="response" style="color:red; margin-top:5px;"></h3>
       </div>
       <div class="buy">
         <button class="first">Buy</button>
       </div>
     </div>
   </div>
-
-  <script src="{% static 'js/offers.js' %}"></script>
+  
+    <script type="text/javascript">window.CSRF_TOKEN = "{{ csrf_token }}"; </script> 
+    <script src="{% static 'js/offers.js' %}"></script>
 </body>
 </html>

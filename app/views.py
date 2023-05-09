@@ -1,68 +1,37 @@
+from http.client import HTTPResponse
+from urllib import response
 from django.shortcuts import render
 from .models import *
 from .serializers import *
-from .models import *
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import math
 import datetime
-from rest_framework.renderers import TemplateHTMLRenderer
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
+@method_decorator(csrf_exempt, name='dispatch')
+
+
 # Create your views here.
 
-class CurrencyList(APIView):
-    def get(self, request):
-        coins_data = CMC(API_KEY).getAllCoins()
-        currencies = []
-
-        for coin in coins_data:
-            currency, created = Currency.objects.update_or_create(
-                symbol=coin['symbol'],
-                defaults={
-                    'name': coin['name'],
-                    'price': coin['quote']['KZT']['price'],
-                    # 'percent_change_1h': coin['quote']['KZT']['percent_change_1h'],
-                    # 'percent_change_24h': coin['quote']['KZT']['percent_change_24h'],
-                }
-            )
-            currencies.append(currency)
-
-        serializer = CurrencySerializer(currencies, many=True)
-
-        return JsonResponse(serializer.data, safe=False)
-
-
-class CurrencyView(APIView):
-    def get(self, request):
-        coins_data = CMC(API_KEY).getAllCoins()
-        currencies = []
-
-        for coin in coins_data:
-            currency, created = Currency.objects.update_or_create(
-                symbol=coin['symbol'],
-                defaults={
-                    'name': coin['name'],
-                    'price': coin['quote']['KZT']['price'],
-                    # 'percent_change_1h': coin['quote']['KZT']['percent_change_1h'],
-                    # 'percent_change_24h': coin['quote']['KZT']['percent_change_24h'],
-                }
-            )
-            currencies.append(currency)
-
-        serializer = CurrencySerializer(currencies, many=True)
-
-        return render(request, 'currency_list.html', {'currencies': serializer.data})
-
+class CurrencyList(generics.ListAPIView):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer
+    
+    # def get(self, request):
+    #     currencies = self.get_queryset()
+    #     return render(request, 'currency_list.html', {'currencies': currencies})
 
 class CurrencyDetail(generics.RetrieveAPIView):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
 
-    def get(self, request, id):
-        data = CMC(API_KEY).getCoinDetails(id)
-        serializer = CurrencySerializer(data)
+    def get(self, request):
+        currency_details = self.get_queryset()
+        return render(request, 'currency_list.html', {'currencies': currency_details})
 
-        return Response(serializer.data)
 '''
 class BalanceList(generics.ListAPIView):
     queryset = Balance.objects.all()
@@ -93,89 +62,71 @@ class TransactionDetail(generics.RetrieveAPIView):
 class BuyHandler(APIView):
     def post(self, request):
         data = request.data
-        pollId = data["pollId"]
+        pollId = data.get("pollId")
+        quantity = float(data.get("quantity"))
         buyer = request.user
-        poll = Poll.objects.get(id=pollId)
 
-        currencyToDict = model_to_dict(poll.currency)
-        userToDict = model_to_dict(poll.user)
+        try:
+            poll = Poll.objects.get(id=pollId)
+        except Poll.DoesNotExist:
+            poll = None
 
-        '''
-        currencyToDict = {
-            "id": poll.currency.id,
-            "name": poll.currency.name,
-            "symbol": poll.currency.symbol,
-            "price": poll.currency.price,
-            "image": poll.currency.image
-            }
-        '''
-
-        dataToSerialize = {
-            "id": poll.id,
-            "user": userToDict,
-            "price": poll.price,
-            "quantity": poll.quantity,
-            "currency": currencyToDict,
-            "created_timestamp": poll.created_timestamp
-            }
+        if poll is None:
+            return Response({"message": "Poll not found"})
+        if quantity < 0 or math.isclose(quantity, 0):
+            return Response({"message": "Quantity is less or equal zero"})
 
         seller = poll.user
-        serializer = PollSerializer(data=dataToSerialize)
 
-        if serializer.is_valid():
-            quantity = poll.quantity
-            if(quantity < poll.quantity or math.isclose(quantity, poll.quantity)):
-                buyerBalance = buyer.balance
-                sumToPay = (float(poll.price) * (float(data.get("quantity"))))
+        if(math.isclose(quantity, poll.quantity) or quantity < poll.quantity):
+            buyerBalance = buyer.balance
+            sumToPay = (float(poll.price) * (float(data.get("quantity"))))
 
-                if (buyerBalance >= sumToPay):
-                    #Updating balance table
-                    buyer.balance -= sumToPay
-                    buyer.save()
+            if (buyerBalance >= sumToPay):
+                #Updating balance table
+                buyer.balance -= sumToPay
+                buyer.save()
 
-                    seller.balance += sumToPay
-                    seller.save()
+                seller.balance += sumToPay
+                seller.save()
 
-                    #Updating Polls and buyer's wallet
-                    pollToUpdate = Poll.objects.get(id=poll.id)
-                    buyerWalletElementToUpdate = list(WalletElement.objects.filter(user=buyer, currency=poll.currency))
+                #Updating Polls and buyer's wallet
+                pollToUpdate = Poll.objects.get(id=poll.id)
+                buyerWalletElementToUpdate = list(WalletElement.objects.filter(user=buyer, currency=poll.currency))
 
-                    quantityToBuy = data.get("quantity")
-                    if(math.isclose(quantityToBuy, poll.quantity)):
-                        pollToUpdate.delete()
-                    else:
-                        pollToUpdate.quantity -= quantityToBuy
-                        pollToUpdate.save()
-
-                    if (buyerWalletElementToUpdate != []):  
-                        buyerWalletElementToUpdate[0].quantity += float(quantityToBuy)
-                        buyerWalletElementToUpdate[0].save()
-                    else:
-                        buyerWalletElementToCreate = \
-                            WalletElement.objects.create(
-                                currency=poll.currency,
-                                user=buyer,
-                                quantity=quantityToBuy
-                            )   
-                         
-                    newTransaction = \
-                        Transaction.objects.create(
-                            seller=seller,
-                            buyer=buyer,
-                            currency=poll.currency,
-                            quantity=quantityToBuy,
-                            price=sumToPay
-                            )
+                if(math.isclose(quantity, poll.quantity)):
+                    pollToUpdate.delete()
                 else:
-                    return Response({"message": "Not enough balance"})
+                    pollToUpdate.quantity -= quantity
+                    pollToUpdate.save()
 
+                if (buyerWalletElementToUpdate != []):  
+                    buyerWalletElementToUpdate[0].quantity += float(quantity)
+                    buyerWalletElementToUpdate[0].save()
+                else:
+                    buyerWalletElementToCreate = \
+                        WalletElement.objects.create(
+                            currency=poll.currency,
+                            user=buyer,
+                            quantity=quantity
+                        )   
+                         
+                newTransaction = \
+                    Transaction.objects.create(
+                        seller=seller,
+                        buyer=buyer,
+                        currency=poll.currency,
+                        quantity=quantity,
+                        price=sumToPay
+                        )
             else:
-                return Response({"message": "You are trying to buy more currency than available"})
+                return Response({"message": "Not enough balance",
+                                 "balance": buyerBalance})
 
-            serializer.save()
-            return Response({"message": "Success"})
+        else:
+            return Response({"message": "You are trying to buy more currency than available"})
 
-        return Response(serializer.errors)
+        return Response({"message": "Success"})
 
     def delete(self, request):
         data = request.data
