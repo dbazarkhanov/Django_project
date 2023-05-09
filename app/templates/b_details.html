@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/b_details.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-identity">
+            <img src="images/1.png" alt="logo">
+            <h1><a href="#">CryptoTracker</a></h1>
+        </div>
+        <nav class="site-navigation">
+            <ul class="nav">
+                <li><a href="#">Offers</a></li>
+                <li><a href="#">Portfolio</a></li>
+                <li><a href="#">Currencies</a></li>
+                <li><a href="#">Log out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main_info">
+        <div class="name">
+            <div class="hone">
+                <img src="images/logo.png" alt="logo" style="width: 30px; height:30px; margin: 10px 5px 10px -5px;">
+                <h1>Bitcoin</h1>
+                <p style="font-size: 13px;">BTC</p>
+            </div>
+            
+            <p style="font-size:15px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-weight: bold;">Pank #1</p>
+        </div>
+        <div class="count">
+            <p style="font-size:13px;">Bitcoin price(BTC)</p>
+            <h2 style="font-family:Verdana, Geneva, Tahoma, sans-serif">$39,531.114</h2>
+            <p style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-size: 17px;">1.50%</p>
+            <button class="first">Buy</button>
+            <div class="details">
+                <p>Market Cap <br> $752,330,942,619.149</p>
+                <p>Fully Diluted Market Cap <br> $830,153,396,010.34</p>
+                <p>Volume (24h) <br> $33,758,942,491.917</p>
+                <p>Volume (24h) <br> 19,031,362</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="description">
+        <h1 style="margin-top: 80px;">BTC Price Live Data</h1>
+        <p>The live Bitcoin price today is $39,531.114 with a 24-hour trading volume of $33,758,942,491.917. We update our BTC to USD price in real-time. The current CoinMarketCap ranking is #1, with a live market cap of $752,330,942,619.149. It has a circulating supply of 19,031,362 BTC coins.</p>
+        <h1 style="margin-top: 50px;">What is Bitcoin (BTC)?</h1>
+        <p>Bitcoin (BTC) is a cryptocurrency. Users are able to generate BTC through the process of mining. Bitcoin has a current supply of 19,031,362. The last known price of Bitcoin is 39,531.79170791 USD and is up 1.35 over the last 24 hours. it is currently trading on 9399 active market(s) with $34,004,917,592.08 traded over the last 24 hours. More information can be found at https://bitcoin.org/.</p>
+    </div>
+</body>
+</html>

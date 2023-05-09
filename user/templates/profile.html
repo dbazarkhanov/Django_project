@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,9 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="{% static 'profile.css' %}">
 
     
 </head>
@@ -76,9 +77,8 @@
                                 <td>BNB</td>
                                 <td>1</td>
                                 <td>469</td>
-                                <td><button class="btn btn-primary profile-button w-100 p-3">buy</button></td>
+                                <td><button class="first">sell</button></td>        
                             </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -87,6 +87,7 @@
     </div>
     </div>
     </div>
+    
     
 </body>
 </html>

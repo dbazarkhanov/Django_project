@@ -15,6 +15,9 @@ class Currency(models.Model):
     symbol = models.CharField(null=True, max_length=100)
     image = models.ImageField(upload_to='media/', max_length=254, default='')
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    percent_change_1h = models.FloatField(null=True)
+    percent_change_24h = models.FloatField(null=True)
+    volume_24h = models.FloatField(null=True)
 
 '''
 class Balance(models.Model):

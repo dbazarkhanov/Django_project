@@ -9,25 +9,21 @@
   display:block;
   justify-content: center;
   align-items: center;
-  margin-left: 7%;
+  margin-left: 6%;
 }
 
 table {
   position: absolute;
   border-collapse: collapse;
   font-family: Tahoma, Geneva, sans-serif;
-  margin-top: 60px;
+  margin-top: 40px;
+
 
 }
 table td {
   padding: 15px;
-  width: 160px;
-}
-
-
-table tr img{
-  margin-left: 20px;
-  width: 40px;
+  width: 120px;
+  margin-bottom: 30px;
 }
 
 table thead td {
@@ -46,27 +42,6 @@ background-color: #f9fafb;
 }
 table tbody tr:nth-child(odd) {
 background-color: #f8f9fe;
-}
-
-
-
-.first{
-  height: 100%;
-  outline: none;
-  font-size: 17px;
-  font-weight: 300;
-  border-radius: 6px;
-  color: #fff;
-  border: none;
-  background: #1a91fe;
-  cursor: pointer;
-  padding: 10px;
-  width: 100px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-.first:hover{
-  background: #0e4bf1;   
 }
 
 .modal {
@@ -166,4 +141,23 @@ form .input-box input{
   position: absolute;
   margin-left: 850px;
   margin-top: 140px;
+}
+
+.first{
+  height: 100%;
+  outline: none;
+  font-size: 17px;
+  font-weight: 300;
+  border-radius: 6px;
+  color: #fff;
+  border: none;
+  background: #1a91fe;
+  cursor: pointer;
+  padding: 10px;
+  width: 100px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.first:hover{
+  background: #0e4bf1;   
 }

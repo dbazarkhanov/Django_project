@@ -18,10 +18,12 @@ class CurrencyList(APIView):
             currency, created = Currency.objects.update_or_create(
                 symbol=coin['symbol'],
                 defaults={
+                    'id': coin['id'],
                     'name': coin['name'],
                     'price': coin['quote']['KZT']['price'],
-                    # 'percent_change_1h': coin['quote']['KZT']['percent_change_1h'],
-                    # 'percent_change_24h': coin['quote']['KZT']['percent_change_24h'],
+                    'percent_change_1h': coin['quote']['KZT']['percent_change_1h'],
+                    'percent_change_24h': coin['quote']['KZT']['percent_change_24h'],
+                    'volume_24h': coin['quote']['KZT']['volume_24h'],
                 }
             )
             currencies.append(currency)
@@ -33,48 +35,17 @@ class CurrencyList(APIView):
 
 class CurrencyView(APIView):
     def get(self, request):
-        coins_data = CMC(API_KEY).getAllCoins()
-        currencies = []
-
-        for coin in coins_data:
-            currency, created = Currency.objects.update_or_create(
-                symbol=coin['symbol'],
-                defaults={
-                    'name': coin['name'],
-                    'price': coin['quote']['KZT']['price'],
-                    # 'percent_change_1h': coin['quote']['KZT']['percent_change_1h'],
-                    # 'percent_change_24h': coin['quote']['KZT']['percent_change_24h'],
-                }
-            )
-            currencies.append(currency)
-
+        currencies = Currency.objects.all()
         serializer = CurrencySerializer(currencies, many=True)
-
         return render(request, 'currency_list.html', {'currencies': serializer.data})
 
 
 class CurrencyDetail(generics.RetrieveAPIView):
-    queryset = Currency.objects.all()
-    serializer_class = CurrencySerializer
-
     def get(self, request, id):
-        data = CMC(API_KEY).getCoinDetails(id)
-        serializer = CurrencySerializer(data)
-
-        return Response(serializer.data)
-'''
-class BalanceList(generics.ListAPIView):
-    queryset = Balance.objects.all()
-    serializer_class = BalanceSerializer
-
-    def get(self, request):
-        balancies = self.get_queryset()
-        return render(request, 'currency_list.html', {'balancies': balancies})
-
-class BalanceDetail(generics.RetrieveAPIView):
-    queryset = Balance.objects.all()
-    serializer_class = BalanceSerializer
-'''
+        currency = Currency.objects.get(id=id)
+        serializer = CurrencySerializer(currency)
+        return render(request, 'currency_detail.html', {'currency': serializer.data})
+    
 
 class TransactionList(generics.ListAPIView):
     queryset = Transaction.objects.all()
@@ -89,8 +60,7 @@ class TransactionDetail(generics.RetrieveAPIView):
     serializer_class = TransactionSerializer
 
 
-class BuyHandler(APIView):
-    #� ���� ������ ���� poll, quantity ������� ��������
+class BuyHandler(APIView):  
     def post(self, request):
         data = request.data
         poll = data["poll"]

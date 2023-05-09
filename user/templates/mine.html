@@ -11,7 +11,7 @@
     crossorigin="anonymous"
   ></script>
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
-    <link rel="stylesheet" href="{% static 'css/offers.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mine.css' %}">
 </head>
 <body>
     <header class="site-header">
@@ -29,8 +29,10 @@
         </nav>
     </header>
 
+
     <div class="cont">
-      <table>
+        <h1 style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">My offers</h1>
+        <table>
         <thead>
             <tr>
                 <td>ID</td>
@@ -38,7 +40,7 @@
                 <td>Quantity</td>
                 <td>Price</td>
                 <td>Time</td>
-                <td>To buy</td>
+                <td>To Cancel</td>
             </tr>
         </thead>
         <tbody>
@@ -48,39 +50,11 @@
                 <td>1</td>
                 <td>469</td>
                 <td>13:45</td>
-                <td><button class="first">Buy</button></td>
+                <td><button class="first">Cancel</button></td>
             </tr>
         </tbody>
     </table>
   </div>
 
-  <div class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div class="left">
-        <h2>35t35</h2>
-        <p>Price: 469</p>
-        <p>Available: 1726.00$</p>
-        <p>Payment Time Limit: 15 minutes</p>
-      </div>
-      <div class="right">
-        <form action="#">
-            <div class="input-box">
-                <label class="labels">I want to pay</label>
-                <input type="text" placeholder="300,000.00 - 1,000,000.00" required>
-            </div>
-            <div class="input-box">
-                <label class="labels">I will receive</label>
-                <input type="text" placeholder="0.00" required>
-            </div>
-          </form>
-      </div>
-      <div class="buy">
-        <button class="first">Buy USDt</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="{% static'js/offers.js' %}"></script>
 </body>
 </html>
