@@ -4,7 +4,7 @@ from requests import Session
 import json
 from app.secrets import API_KEY
 import sys
-sys.path.append('/Users/Dell/Desktop/KBTU/django/project/user')
+sys.path.append(r'/Users/araimbayeva/Desktop/Django/DjangoProject/user/')
 from user.models import User
 from django.db import models
 
@@ -40,9 +40,6 @@ class WalletElement(models.Model):
     def __str__(self):
         return f"Элемент кошелька {self.user.username}, валюта {self.currency.name}"
 
-
-
-    
 
 #Stores historical data (all transactions of all users)
 class Transaction(models.Model):

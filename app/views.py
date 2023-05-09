@@ -1,4 +1,6 @@
+from django.forms import model_to_dict
 from django.shortcuts import render
+from .models import *
 from .serializers import *
 from .models import *
 from rest_framework import generics
@@ -6,7 +8,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import math
 import datetime
-from rest_framework.renderers import TemplateHTMLRenderer
 # Create your views here.
 
 class CurrencyList(APIView):
@@ -60,13 +61,37 @@ class TransactionDetail(generics.RetrieveAPIView):
     serializer_class = TransactionSerializer
 
 
-class BuyHandler(APIView):  
+class BuyHandler(APIView):
     def post(self, request):
         data = request.data
-        poll = data["poll"]
+        pollId = data["pollId"]
         buyer = request.user
+        poll = Poll.objects.get(id=pollId)
+
+        currencyToDict = model_to_dict(poll.currency)
+        userToDict = model_to_dict(poll.user)
+
+        '''
+        currencyToDict = {
+            "id": poll.currency.id,
+            "name": poll.currency.name,
+            "symbol": poll.currency.symbol,
+            "price": poll.currency.price,
+            "image": poll.currency.image
+            }
+        '''
+
+        dataToSerialize = {
+            "id": poll.id,
+            "user": userToDict,
+            "price": poll.price,
+            "quantity": poll.quantity,
+            "currency": currencyToDict,
+            "created_timestamp": poll.created_timestamp
+            }
+
         seller = poll.user
-        serializer = PollSerializer(data=data)
+        serializer = PollSerializer(data=dataToSerialize)
 
         if serializer.is_valid():
             quantity = poll.quantity
@@ -150,7 +175,7 @@ class BuyHandler(APIView):
         return Response(serializer.errors)
 
 class SellHandler(APIView):
-    # � ���� ������ ���� quantity, wallet element, price
+    # в дате должно быть quantity, wallet element, price
     def post(self, request):
         data = request.data
         user = request.user
@@ -193,7 +218,8 @@ class PollList(generics.ListAPIView):
 
     def get(self, request):
         polls = self.get_queryset()
-        return render(request, 'offers.html', {'polls': polls})
+        serializer = PollSerializer(polls, many=True)
+        return render(request, 'offers.html', {'polls': serializer.data})
 
 
 class PollDetail(generics.RetrieveAPIView):

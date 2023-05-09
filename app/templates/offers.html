@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Offers</title>
     <script
     src="https://kit.fontawesome.com/1935d064dd.js"
     crossorigin="anonymous"
@@ -16,7 +16,7 @@
 <body>
     <header class="site-header">
         <div class="site-identity">
-            <img src="images/1.png" alt="logo">
+            <img src="/media/1.png" alt="logo">
             <h1><a href="#">CryptoTracker</a></h1>
         </div>
         <nav class="site-navigation">
@@ -30,6 +30,7 @@
     </header>
 
     <div class="cont">
+        <h1>Current offers</h1>
       <table>
         <thead>
             <tr>
@@ -38,18 +39,20 @@
                 <td>Quantity</td>
                 <td>Price</td>
                 <td>Time</td>
-                <td>To buy</td>
+                <td></td>
             </tr>
         </thead>
         <tbody>
+        {% for i in polls %}
             <tr>
-                <td>35t35</td>
-                <td>BNB</td>
-                <td>1</td>
-                <td>469</td>
-                <td>13:45</td>
-                <td><button class="first">Buy</button></td>
+                <td>{{ i.id }}</td>
+                <td>{{ i.currency.name }}</td>
+                <td>{{ i.quantity }}</td>
+                <td>{{ i.price }}</td>
+                <td>{{ i.created_timestamp }} (GMT+6)</td>
+                <td><button class="first" onclick="openPoll({{ i.id }}, '{{ i.currency.name }}', {{ i.quantity }}, {{ i.price }})">Buy</button></td>
             </tr>
+        {% endfor %}
         </tbody>
     </table>
   </div>
@@ -58,29 +61,30 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <div class="left">
-        <h2>35t35</h2>
-        <p>Price: 469</p>
-        <p>Available: 1726.00$</p>
+        <h2 class="currencyName"></h2>
+        <p class="currencyPrice">Price: $</p>
+        <p class="currencyQuantity">Available: </p>
         <p>Payment Time Limit: 15 minutes</p>
       </div>
       <div class="right">
         <form action="#">
             <div class="input-box">
                 <label class="labels">I want to pay</label>
-                <input type="text" placeholder="300,000.00 - 1,000,000.00" required>
+                <input type="number" class="toPayPrice" required min="0.5" step="0.5">
             </div>
             <div class="input-box">
                 <label class="labels">I will receive</label>
-                <input type="text" placeholder="0.00" required>
+                <input type="number" class="toGetQuantity" required step="0.00001"> 
             </div>
           </form>
       </div>
       <div class="buy">
-        <button class="first">Buy USDt</button>
+        <button class="first">Buy</button>
       </div>
     </div>
   </div>
 
-  <script src="{% static'js/offers.js' %}"></script>
+  <script src="{% static 'js/offers.js' %}"></script>
+
 </body>
 </html>

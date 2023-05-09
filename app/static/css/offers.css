@@ -50,7 +50,7 @@ background-color: #f8f9fe;
 
 
 
-.first{
+.first {
   height: 100%;
   outline: none;
   font-size: 17px;
@@ -160,6 +160,10 @@ form .input-box input{
 .input-box input:focus,
 .input-box input:valid{
   border-color: #4070f4;
+}
+
+.input-box input:invalid {
+    border-color: #ff0000;
 }
 
 .buy{

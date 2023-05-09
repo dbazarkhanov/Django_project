@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\app",
+    "\\app\\static",
+    "\\app\\static\\js",
+    "\\app\\templates",
+    "\\project",
+    "\\user",
+    "\\user\\static",
+    "\\user\\static\\css",
+    "\\user\\templates"
+  ],
+  "SelectedNode": "\\app\\static\\js\\offers.js",
+  "PreviewInSolutionExplorer": false
+}
