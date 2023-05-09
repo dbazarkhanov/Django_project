@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 body {
     font-family: "Open Sans", sans-serif;
+    padding: 0;
     margin: 0;
     background-color: #f8f9fe;
     height: 1000px;
@@ -9,7 +10,7 @@ body {
 header{
     background-color: white;
     box-shadow: 0 5px 10px rgba(96, 157, 255, 0.2);
-    margin-bottom: 100px;
+    margin-bottom: 50px;
 }
 
 header img{

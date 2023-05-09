@@ -36,9 +36,16 @@
     
                         $.each(data, function(index, currency) {
                             var row = $("<tr></tr>");
+                            var nameCell = $("<td></td>");
+                            var nameLink = $("<a></a>").attr("href", "/currencies/" + currency.id).text(currency.name);
+                            nameCell.append(nameLink);
+                            row.append(nameCell);
                             row.append($("<td></td>").text(currency.name));
                             row.append($("<td></td>").text(currency.symbol));
                             row.append($("<td></td>").text(currency.price));
+                            row.append($("<td></td>").text(currency.percent_change_1h));
+                            row.append($("<td></td>").text(currency.percent_change_24h));
+                            row.append($("<td></td>").text(currency.volume_24h));
                             tableBody.append(row);
                         });
                     },
@@ -49,7 +56,7 @@
             }
     
             // Обновление данных каждую секунду
-            setInterval(updateData, 5000);
+            setInterval(updateData, 2000);
         });
     </script>
     
@@ -62,10 +69,13 @@
                 <th>Name</th>
                 <th>Symbol</th>
                 <th>Price</th>
+                <th>1h %</th>
+                <th>24h %</th>
+                <th>volume 24h</th>
             </tr>
         </thead>
         <tbody id="currency-table-body">
-            <!-- Data will be populated dynamically by JavaScript -->
+            <!-- Данные будут заполняться динамически с помощью AJAX -->
         </tbody>
     </table>
 </body>
