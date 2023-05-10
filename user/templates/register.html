@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/register.css' %}">
-    <title>Document</title>
+    <title>Registration</title>
 </head>
 <body>
     <div class="first">
@@ -15,24 +15,34 @@
     <div class="second">
         <div class="wrapper">
             <h2>Registration</h2>
-            <form action="#">
+            <form action="{% url 'user:register' %}" method="post">
+              {% csrf_token %}
               <div class="input-box">
-                <input type="text" placeholder="Enter your login" required>
+                <label for="{{ form.username.id_for_label }}">Username</label>
+                {{ form.username }}
               </div>
               <div class="input-box">
-                <input type="text" placeholder="Enter your name" required>
+                <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                {{ form.first_name }}
               </div>
               <div class="input-box">
-                <input type="text" placeholder="Enter your last name" required>
+                <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                {{ form.last_name }}
               </div>
               <div class="input-box">
-                <input type="text" placeholder="Enter your email" required>
+                <label for="{{ form.email.id_for_label }}">Email</label>
+                {{ form.email }}
               </div>
               <div class="input-box">
-                <input type="password" placeholder="Create password" required>
+                <label for="{{ form.password1.id_for_label }}">Password</label>
+                {{ form.password1 }}
+              </div>
+              <div class="input-box">
+                <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+                {{ form.password2 }}
               </div>
               <div class="policy">
-                <input type="checkbox">
+                <input type="checkbox" required>
                 <h3>I accept all terms & condition</h3>
               </div>
               <div class="input-box button">

@@ -1,14 +1,15 @@
 from django.forms import model_to_dict
+from django.http import JsonResponse
 from django.shortcuts import render
 from .models import *
 from .serializers import *
-from .models import *
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import math
 import datetime
 # Create your views here.
+
 
 class CurrencyList(APIView):
     def get(self, request):
@@ -20,15 +21,18 @@ class CurrencyList(APIView):
                 symbol=coin['symbol'],
                 defaults={
                     'id': coin['id'],
+                    'cmc_rank': coin['cmc_rank'],
                     'name': coin['name'],
-                    'price': coin['quote']['KZT']['price'],
-                    'percent_change_1h': coin['quote']['KZT']['percent_change_1h'],
-                    'percent_change_24h': coin['quote']['KZT']['percent_change_24h'],
-                    'volume_24h': coin['quote']['KZT']['volume_24h'],
+                    'price': coin['quote']['USD']['price'],
+                    'percent_change_24h': coin['quote']['USD']['percent_change_24h'],
+                    'percent_change_7d': coin['quote']['USD']['percent_change_7d'],
+                    'volume_24h': coin['quote']['USD']['volume_24h'],
+                    'market_cap': coin['quote']['USD']['market_cap'],
                 }
             )
+        
             currencies.append(currency)
-
+        
         serializer = CurrencySerializer(currencies, many=True)
 
         return JsonResponse(serializer.data, safe=False)
@@ -38,28 +42,22 @@ class CurrencyView(APIView):
     def get(self, request):
         currencies = Currency.objects.all()
         serializer = CurrencySerializer(currencies, many=True)
-        return render(request, 'currency_list.html', {'currencies': serializer.data})
+        return render(request, 'crypt.html', {'currencies': serializer.data})
 
 
 class CurrencyDetail(generics.RetrieveAPIView):
     def get(self, request, id):
         currency = Currency.objects.get(id=id)
-        serializer = CurrencySerializer(currency)
-        return render(request, 'currency_detail.html', {'currency': serializer.data})
+        serializer = CurrencySerializer(currency)  
+        coin_meta_data = CMC(API_KEY).getCoinMetadata(currency.id)
+
+        if coin_meta_data['description'] not in currency.description:
+            currency.image = coin_meta_data['logo']
+            currency.description = coin_meta_data['description']
+            currency.save()
+            
+        return render(request, 'b_details.html', {'currency': serializer.data})
     
-
-class TransactionList(generics.ListAPIView):
-    queryset = Transaction.objects.all()
-    serializer_class = TransactionSerializer
-
-    def get(self, request):
-        transactions = self.get_queryset()
-        return render(request, 'currency_list.html', {'transactions': transactions})
-
-class TransactionDetail(generics.RetrieveAPIView):
-    queryset = Transaction.objects.all()
-    serializer_class = TransactionSerializer
-
 
 class BuyHandler(APIView):
     def post(self, request):

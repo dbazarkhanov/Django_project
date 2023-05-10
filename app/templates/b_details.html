@@ -5,22 +5,69 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Currency Detail</title>
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
     <link rel="stylesheet" href="{% static 'css/b_details.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Получение идентификатора валюты из URL-адреса
+            var urlParts = window.location.href.split("/");
+            var currencyId = urlParts[urlParts.length - 2];
+        
+            // Функция для обновления данных
+            function updateData() {
+                // Выполнение AJAX-запроса для получения данных о валюте по её идентификатору
+                $.ajax({
+                    url: "/api/currencies/",
+                    type: "GET",
+                    success: function(data) {
+                        var currency = data.filter(function(id){
+                            return id.id == currencyId;
+                        });
+                        console.log(currency);
+                        // Обновление данных на странице
+                        $(".hone img").attr("src", "https://s2.coinmarketcap.com/static/img/coins/64x64/" + currencyId + ".png")
+                        $(".hone h1").text(currency[0].name);
+                        $(".hone p").text(currency[0].symbol);
+                        $(".name p").text("Rank #" + currency[0].cmc_rank);
+                        $(".count h2").text(currency[0].price);
+                        $(".count p:eq(0)").text(currency[0].name + "Price("+currency[0].symbol+')');
+                        $(".count p:eq(1)").text(currency[0].percent_change_24h.toLocaleString('en-US', {maximumFractionDigits: 3}) + "%");
+                        $(".details p:eq(0)").text("Market Cap\n" + currency[0].market_cap.toLocaleString('en-US', {maximumFractionDigits: 3}));
+                        $(".details p:eq(1)").text("Volume (24h)\n" + currency[0].volume_24h.toLocaleString('en-US', {maximumFractionDigits: 3}));
+                        $(".description h1:eq(0)").text(currency[0].symbol +" Price Live Data");
+                        $(".description h1:eq(1)").text("What is "+currency[0].name+" ("+currency[0].symbol+")?");
+                        $(".description p:eq(0)").text("The live"+currency[0].name+" price today is $"+currency[0].price+
+                                                    " with a 24-hour trading volume of $"+currency[0].volume_24h.toLocaleString('en-US', {maximumFractionDigits: 3})+
+                                                    ". We update our "+currency[0].symbol+
+                                                    " to USD price in real-time. The current CoinMarketCap ranking is #"+currency[0].cmc_rank+
+                                                    ", with a live market cap of $"+currency[0].market_cap.toLocaleString('en-US', {maximumFractionDigits: 3})+".");
+                        $(".description p:eq(1)").text(currency[0].description);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+    
+            // Обновление данных каждую секунду
+            setInterval(updateData, 2000);
+        });
+    </script>
 </head>
 <body>
     <header class="site-header">
         <div class="site-identity">
-            <img src="images/1.png" alt="logo">
-            <h1><a href="#">CryptoTracker</a></h1>
+            <img src="/media/1.png" alt="logo">
+            <h1><a href="/">CryptoTracker</a></h1>
         </div>
         <nav class="site-navigation">
             <ul class="nav">
-                <li><a href="#">Offers</a></li>
-                <li><a href="#">Portfolio</a></li>
-                <li><a href="#">Currencies</a></li>
-                <li><a href="#">Log out</a></li>
+                <li><a href="/app/offers">Offers</a></li>
+                <li><a href="/user/profile">Portfolio</a></li>
+                <li><a href="/app/currencies">Currencies</a></li>
+                <li><a href="/user/login">Log out</a></li>
             </ul>
         </nav>
     </header>
@@ -28,32 +75,61 @@
     <div class="main_info">
         <div class="name">
             <div class="hone">
-                <img src="images/logo.png" alt="logo" style="width: 30px; height:30px; margin: 10px 5px 10px -5px;">
-                <h1>Bitcoin</h1>
-                <p style="font-size: 13px;">BTC</p>
+                <img src="#" alt="logo" style="width: 30px; height:30px; margin: 10px 5px 10px -5px;">
+                <h1>Loading...</h1>
+                <p style="font-size: 13px;"></p>
             </div>
             
-            <p style="font-size:15px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-weight: bold;">Pank #1</p>
+            <p style="font-size:15px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-weight: bold;">Loading....</p>
         </div>
         <div class="count">
-            <p style="font-size:13px;">Bitcoin price(BTC)</p>
-            <h2 style="font-family:Verdana, Geneva, Tahoma, sans-serif">$39,531.114</h2>
-            <p style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-size: 17px;">1.50%</p>
+            <p style="font-size:13px;">Loading...</p>
+            <h2 style="font-family:Verdana, Geneva, Tahoma, sans-serif">Loading...</h2>
+            <p style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-size: 17px;"></p>
             <button class="first">Buy</button>
             <div class="details">
-                <p>Market Cap <br> $752,330,942,619.149</p>
-                <p>Fully Diluted Market Cap <br> $830,153,396,010.34</p>
-                <p>Volume (24h) <br> $33,758,942,491.917</p>
-                <p>Volume (24h) <br> 19,031,362</p>
+                <p>Market Cap <br>Loading...</p>
+                <p>Volume (24h) <br>Loading...</p>
             </div>
         </div>
     </div>
 
     <div class="description">
-        <h1 style="margin-top: 80px;">BTC Price Live Data</h1>
-        <p>The live Bitcoin price today is $39,531.114 with a 24-hour trading volume of $33,758,942,491.917. We update our BTC to USD price in real-time. The current CoinMarketCap ranking is #1, with a live market cap of $752,330,942,619.149. It has a circulating supply of 19,031,362 BTC coins.</p>
-        <h1 style="margin-top: 50px;">What is Bitcoin (BTC)?</h1>
-        <p>Bitcoin (BTC) is a cryptocurrency. Users are able to generate BTC through the process of mining. Bitcoin has a current supply of 19,031,362. The last known price of Bitcoin is 39,531.79170791 USD and is up 1.35 over the last 24 hours. it is currently trading on 9399 active market(s) with $34,004,917,592.08 traded over the last 24 hours. More information can be found at https://bitcoin.org/.</p>
+        <h1 style="margin-top: 80px;"></h1>
+        <p></p>
+        <h1 style="margin-top: 50px;"></h1>
+        <p></p>
     </div>
+    
+
+  <div class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="left">
+        <h2>35t35</h2>
+        <p>Price: 469</p>
+        <p>Available: 1726.00$</p>
+        <p>Payment Time Limit: 15 minutes</p>
+      </div>
+      <div class="right">
+        <form action="#">
+            <div class="input-box">
+                <label class="labels">I want to pay</label>
+                <input type="text" placeholder="300,000.00 - 1,000,000.00" required>
+            </div>
+            <div class="input-box">
+                <label class="labels">I will receive</label>
+                <input type="text" placeholder="0.00" required>
+            </div>
+          </form>
+      </div>
+      <div class="buy">
+        <button class="first">Buy USDt</button>
+      </div>
+    </div>
+  </div> 
+
+
+  <script src="{% static 'js/crypt.js' %}"></script>
 </body>
 </html>

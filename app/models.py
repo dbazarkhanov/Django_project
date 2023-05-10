@@ -11,25 +11,16 @@ from django.db import models
 # Create your models here.
 
 class Currency(models.Model):
+    cmc_rank = models.BigIntegerField(null=True)
     name = models.CharField(null=True, max_length=100)
     symbol = models.CharField(null=True, max_length=100)
-    image = models.ImageField(upload_to='media/', max_length=254, default='')
+    image = models.ImageField(upload_to='currency', max_length=254, default='')
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    percent_change_1h = models.FloatField(null=True)
-    percent_change_24h = models.FloatField(null=True)
-    volume_24h = models.FloatField(null=True)
-
-'''
-class Balance(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='balance')
-    balance = models.FloatField(default=0)
-    currency_id = models.ForeignKey(to=Currency, on_delete=models.CASCADE,)
-    quantity = models.FloatField(null=True)
-    image = models.ImageField(upload_to='media/', max_length=254, default='')
-
-    def __str__(self):
-        return f"{self.user}"
-'''
+    percent_change_24h = models.FloatField(max_length=10, null=True)
+    percent_change_7d = models.FloatField(max_length=10, null=True)
+    volume_24h = models.FloatField(max_length=10, null=True)
+    market_cap = models.FloatField(max_length=10, null=True)
+    description = models.TextField(blank=True)
 
 #A single element inside person's wallet
 class WalletElement(models.Model):
@@ -79,13 +70,15 @@ class CMC(models.Model):
         parameters = {
             'start': '1',
             'limit': '25',
-            'convert': 'KZT',
         }
         url = self.apiUrl + '/v1/cryptocurrency/listings/latest'
         response = self.session.get(url, params=parameters)
-        data = json.loads(response.text)['data']
-        
-        return data
+
+        try:
+            data = json.loads(response.text)['data']
+            return data
+        except KeyError: 
+            return 'Error'
 
     def getCoinMetadata(self, id):
         parameters = {
@@ -93,9 +86,11 @@ class CMC(models.Model):
         }
         url = self.apiUrl + '/v2/cryptocurrency/info'
         response = self.session.get(url, params=parameters)
-        data = json.loads(response.text)['data'][str(id)]
-
-        return data
+        try:
+            data = json.loads(response.text)['data'][str(id)]
+            return data
+        except KeyError: 
+                return 'Loading' 
 
     def getCoinDetails(self, id):
         parameters = {
@@ -103,6 +98,6 @@ class CMC(models.Model):
         }
         url = self.apiUrl + '/v2/cryptocurrency/quotes/latest'
         response = self.session.get(url, params=parameters)
+
         data = json.loads(response.text)['data'][str(id)]
-        
         return data
