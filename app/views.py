@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 @method_decorator(csrf_exempt, name='dispatch')
 
+
 # Create your views here.
 
 

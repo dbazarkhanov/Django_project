@@ -4,22 +4,24 @@ from requests import Session
 import json
 from app.secrets import API_KEY
 import sys
-sys.path.append('C:/Users/d_baz/Desktop/KBTU/django/projec/tuser/')
+sys.path.append('C:/Users/d_baz/Desktop/KBTU/django/project/user/')
 from user.models import User
 from django.db import models
-
 # Create your models here.
 
 class Currency(models.Model):
     cmc_rank = models.BigIntegerField(null=True)
     name = models.CharField(null=True, max_length=100)
     symbol = models.CharField(null=True, max_length=100)
+
     image = models.ImageField(upload_to='currency', max_length=254, default='')
     price = models.DecimalField(max_digits=10, decimal_places=2)
+
     percent_change_24h = models.FloatField(max_length=10, null=True)
     percent_change_7d = models.FloatField(max_length=10, null=True)
     volume_24h = models.FloatField(max_length=10, null=True)
     market_cap = models.FloatField(max_length=10, null=True)
+
     description = models.TextField(blank=True)
 
 #A single element inside person's wallet

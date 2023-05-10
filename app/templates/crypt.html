@@ -30,7 +30,7 @@
                             var row = $("<tr></tr>");
                             var nameCell = $("<td></td>");
                             row.append($("<td></td>").text(currency.id));
-                            var nameLink = $("<a></a>").attr("href", "/currencies/" + currency.id).text(currency.name);
+                            var nameLink = $("<a></a>").attr("href", "/currencies/" + currency.id).text(currency.name+' '+currency.symbol);
                             nameCell.append(nameLink);
                             row.append(nameCell);
                             row.append($("<td></td>").text('$' + currency.price));
@@ -55,14 +55,14 @@
 <body>
     <header class="site-header">
         <div class="site-identity">
-            <img src="images/1.png" alt="logo">
+            <img src="/meida/1.png" alt="logo">
             <h1><a href="/">CryptoTracker</a></h1>
         </div>
         <nav class="site-navigation">
             <ul class="nav">
-              <li><a href="/app/offers">Offers</a></li>
+              <li><a href="/offers">Offers</a></li>
               <li><a href="/user/profile">Portfolio</a></li>
-              <li><a href="/app/currencies">Currencies</a></li>
+              <li><a href="/currencies">Currencies</a></li>
               <li><a href="/user/login">Log out</a></li>
             </ul>
         </nav>
