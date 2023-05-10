@@ -3,68 +3,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>Login</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <title>Log In</title>
 </head>
-<body class="bg-primary">
-<div id="layoutAuthentication">
-    <div id="layoutAuthentication_content">
-        <main>
-            <div class="container">
-  <h1> Login Form </h1>
-                <div class="row justify-content-center">
-                    <div class="col-lg-5">
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert"
-                             style="margin-top: 50px;">
-                            <strong>Hello!</strong> Check in on some of those fields below.
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="card shadow-lg border-0 rounded-lg mt-5">
-                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Авторизация</h3>
-                            </div>
-
-                            <div class="card-body">
-                                <form action="{% url 'user:login' %}" method="post">
-                                   {% csrf_token %}
-                                    <div class="form-group">
-                                        <label class="small mb-1" for="{{ form.username.id_for_label }}">Имя пользователя</label>
-                                        {{ form.username }}
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="small mb-1" for="{{ form.password.id_for_label }}">Пароль</label>
-                                        {{ form.password }}
-                                    </div>
-                                    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                        <a class="small" href="#">Забыли пароль?</a>
-                                        <input class="btn btn-primary" type="submit" value="Авторизоваться">
-                                    </div>
-                                    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                        <a href="#">
-                                            <i class="fab fa-google fa-2x" style="color: #d9503e;"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fab fa-vk fa-2x" style="color: #4a658b;"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fab fa-github fa-2x" style="color: #303030;"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fab fa-facebook fa-2x" style="color: #405794;"></i>
-                                        </a>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="card-footer text-center">
-                                <div class="small"><a href="{% url 'user:register' %}">Нужен аккаунт? Зарегистрируйся!</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+<body>
+    <div class="first">
+        <h1 class="main">CryptoTracker</h1>
     </div>
-</div>
+    <div class="second">
+        <div class="wrapper">
+            <h2>Login page</h2>
+            <form action="{% url 'user:login' %}" method="post">
+              {% csrf_token %}
+              <div class="input-box">
+                <label form="{{ form.username.id_for_label }}" placeholder="Enter your login" required>
+                {{ form.username }}
+              </div>
+              <div class="input-box">
+                <label form="{{ form.password.id_for_label }}" placeholder="Enter password" required>
+                {{ form.password }}
+              </div>
+              <div class="input-box button">
+                <input type="Submit" value="Login Now">
+              </div>
+              <div class="text">
+                <h3>Do not have an account? <a href="{% url 'user:register' %}">Register now</a></h3>
+              </div>
+            </form>
+          </div>
+    </div>
 </body>
 </html>

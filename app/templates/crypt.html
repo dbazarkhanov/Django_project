@@ -5,26 +5,65 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Currency List</title>
     <script
     src="https://kit.fontawesome.com/1935d064dd.js"
     crossorigin="anonymous"
   ></script>
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
     <link rel="stylesheet" href="{% static 'css/crypt.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Функция для обновления данных
+            function updateData() {
+                // Выполнение AJAX-запроса
+                $.ajax({
+                    url: "/api/currencies/",
+                    type: "GET",
+                    success: function(data) {
+                        console.log(data);
+                        // Обработка полученных данных
+                        var tableBody = $("#currency-table-body");
+                        tableBody.empty();
+                        $.each(data, function(index, currency) {
+                            var row = $("<tr></tr>");
+                            var nameCell = $("<td></td>");
+                            row.append($("<td></td>").text(currency.id));
+                            var nameLink = $("<a></a>").attr("href", "/currencies/" + currency.id).text(currency.name+' '+currency.symbol);
+                            nameCell.append(nameLink);
+                            row.append(nameCell);
+                            row.append($("<td></td>").text('$' + currency.price));
+                            row.append($("<td></td>").text(currency.percent_change_24h.toLocaleString('en-US', {maximumFractionDigits: 3})));
+                            row.append($("<td></td>").text(currency.percent_change_7d.toLocaleString('en-US', {maximumFractionDigits: 3})));
+                            row.append($("<td></td>").text('$' + currency.market_cap.toLocaleString('en-US', {maximumFractionDigits: 3})));
+                            row.append($("<td></td>").text('$' + currency.volume_24h.toLocaleString('en-US', {maximumFractionDigits: 3})));
+                            tableBody.append(row);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+    
+            // Обновление данных каждую секунду
+            setInterval(updateData, 2000);
+        });
+    </script>
 </head>
 <body>
     <header class="site-header">
         <div class="site-identity">
-            <img src="images/1.png" alt="logo">
-            <h1><a href="#">CryptoTracker</a></h1>
+            <img src="/meida/1.png" alt="logo">
+            <h1><a href="/">CryptoTracker</a></h1>
         </div>
         <nav class="site-navigation">
             <ul class="nav">
-                <li><a href="#">Offers</a></li>
-                <li><a href="#">Portfolio</a></li>
-                <li><a href="#">Currencies</a></li>
-                <li><a href="#">Log out</a></li>
+              <li><a href="/offers">Offers</a></li>
+              <li><a href="/user/profile">Portfolio</a></li>
+              <li><a href="/currencies">Currencies</a></li>
+              <li><a href="/user/login">Log out</a></li>
             </ul>
         </nav>
     </header>
@@ -33,7 +72,7 @@
     <div class="cont">    
     <h1 style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Today's Cryptocurrency Prices by Market Cap</h1>
 
-      <table>
+      <table id="currency-table">
         <thead>
             <tr>
                 <td>ID</td>
@@ -42,54 +81,22 @@
                 <td>24h%</td>
                 <td>7d%</td>
                 <td>Market Cap</td>
-                <td>Volume(24h)</td>
-                <td>         <td>
+                <td>Volume 24h</td>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="currency-table-body">
             <tr>
-                <td>1</td>
-                <td>Bitcoin</td>
-                <td>38611.03</td>
-                <td>-2.40</td>
-                <td>-2.35</td>
-                <td>734,252,325.20</td>
-                <td>734,252,325.20</td>
-                <td><button class="first">Buy</button></td>
+              <!-- Ajax -->
+              <td>Loading...</td>
+              <td>Please</td>
+              <td>Wait</td>
+              <td>Or</td>
+              <td>Update</td>
+              <td>The</td>
+              <td>Page</td>
             </tr>
         </tbody>
     </table>
   </div>
-
-
-  <div class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div class="left">
-        <h2>35t35</h2>
-        <p>Price: 469</p>
-        <p>Available: 1726.00$</p>
-        <p>Payment Time Limit: 15 minutes</p>
-      </div>
-      <div class="right">
-        <form action="#">
-            <div class="input-box">
-                <label class="labels">I want to pay</label>
-                <input type="text" placeholder="300,000.00 - 1,000,000.00" required>
-            </div>
-            <div class="input-box">
-                <label class="labels">I will receive</label>
-                <input type="text" placeholder="0.00" required>
-            </div>
-          </form>
-      </div>
-      <div class="buy">
-        <button class="first">Buy USDt</button>
-      </div>
-    </div>
-  </div> 
-
-
-  <script src="{% static 'js/crypt.js' %}"></script>
 </body>
 </html>

@@ -34,7 +34,7 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
-                return HttpResponseRedirect(reverse('app:main'))
+                return HttpResponseRedirect(reverse('app:crypt'))
     else:
         form = UserLoginForm()
     context = {'form': form}
