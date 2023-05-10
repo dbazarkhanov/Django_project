@@ -4,7 +4,7 @@ from requests import Session
 import json
 from app.secrets import API_KEY
 import sys
-sys.path.append(r'/Users/araimbayeva/Desktop/Django/DjangoProject/user/')
+sys.path.append('C:/Users/d_baz/Desktop/KBTU/django/projec/tuser/')
 from user.models import User
 from django.db import models
 
@@ -46,7 +46,7 @@ class Transaction(models.Model):
 class Poll(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     currency = models.ForeignKey(to=Currency, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=0)
+    quantity = models.FloatField(default=0)
     price = models.FloatField(default=0)
     created_timestamp = models.DateTimeField(auto_now_add=True)
 

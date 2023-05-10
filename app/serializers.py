@@ -18,8 +18,9 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 
 class PollSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False)
-    currency = CurrencySerializer(many=False)
+    #user = serializers.PrimaryKeyRelatedField(read_only=True)
+    #currency = serializers.PrimaryKeyRelatedField(read_only=True)
+    currency = CurrencySerializer()
     class Meta:
         model = Poll
         fields = '__all__'
