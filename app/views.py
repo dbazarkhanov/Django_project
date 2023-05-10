@@ -9,19 +9,21 @@ import datetime
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
+'''
 @method_decorator(csrf_exempt, name='dispatch')
 
-        for coin in coins_data:
-            currency, created = Currency.objects.update_or_create(
-                symbol=coin['symbol'],
-                defaults={
-                    'name': coin['name'],
-                    'price': coin['quote']['KZT']['price'],
-                    # 'percent_change_1h': coin['quote']['KZT']['percent_change_1h'],
-                    # 'percent_change_24h': coin['quote']['KZT']['percent_change_24h'],
-                }
-            )
-            currencies.append(currency)
+for coin in coins_data:
+    currency, created = Currency.objects.update_or_create(
+        symbol=coin['symbol'],
+        defaults={
+            'name': coin['name'],
+            'price': coin['quote']['KZT']['price'],
+            # 'percent_change_1h': coin['quote']['KZT']['percent_change_1h'],
+            # 'percent_change_24h': coin['quote']['KZT']['percent_change_24h'],
+        }
+    )
+    currencies.append(currency)
+'''
 
 # Create your views here.
 
@@ -160,76 +162,98 @@ class BuyHandler(APIView):
 
         return Response({"message": "Success"})
 
-    def delete(self, request):
-        data = request.data
+
+class DeleteHandler(APIView):
+    def delete(self, request, id):
         user = request.user
-        poll = data["poll"]
-        serializer = PollSerializer(data=data)
+        if not id:
+            return Response({"message": "No id"})
+
+        try:
+             poll = Poll.objects.get(id=id)
+        except Poll.DoesNotExist:
+             poll = None
         
-        if serializer.is_valid():
-            pollToDelete = Poll.objects.get(id=poll.id)
-            pollToDelete.delete()
+        if poll is None:
+            return Response({"message": "Poll not found"})
 
-            WalletElementToReturn = list(WalletElement.objects.filter(user=user, currency=poll.currency))
-            if (WalletElementToReturn != []):  
-                WalletElementToReturn[0].quantity += float(data.get("quantity"))
-                WalletElementToReturn[0].save()
-            else:
-                buyerWalletElementToCreate = \
-                    WalletElement.objects.create(
-                        currency=poll.currency,
-                        user=user,
-                        quantity=data.get("quantity")
-                    ) 
-            serializer.save()
-            return Response({"message": "Success"})
-
-        return Response(serializer.errors)
+        WalletElementToReturn = list(WalletElement.objects.filter(user=user, currency=poll.currency))
+        if (WalletElementToReturn != []):  
+            WalletElementToReturn[0].quantity += float(poll.quantity)
+            WalletElementToReturn[0].save()
+        else:
+            buyerWalletElementToCreate = \
+                WalletElement.objects.create(
+                    currency=poll.currency,
+                    user=user,
+                    quantity=poll.quantity
+                ) 
+        poll.delete()
+        return Response({"message": "Success"})
 
 class SellHandler(APIView):
-    # в дате должно быть quantity, wallet element, price
     def post(self, request):
         data = request.data
         user = request.user
-        serializer = TransactionSerializer(data=data)
+        quantityToSell = float(data.get("quantity"))
+        price = float(data.get("price"))
 
-        if serializer.is_valid():
-            quantityToSell = data.get("quantity")
-            price = data.get("price")
-            walletElement = data.get("walletElement")
+        try:
+             walletElement = WalletElement.objects.get(id=data.get("walletElementId"))
+        except WalletElement.DoesNotExist:
+             walletElement = None
+        
+        if walletElement is None:
+            return Response({"message": "Wallet element not found"})
+        if quantityToSell < 0 or math.isclose(quantityToSell, 0):
+            return Response({"message": "Quantity is less or equal zero"})
+        if price < 0 or math.isclose(price, 0):
+            return Response({"message": "Price is less or equal zero"})
+       
+        if price > (walletElement.currency.price * 3):
+            return Response({"message": "The price is too high. The price should not be more than 3 times the market price."})
 
-            if(quantityToSell < walletElement.quantity or math.isclose(quantityToSell, walletElement.quantity)):
-                pollToCreate = \
-                    Poll.objects.create(
-                        user=user,
-                        currency=walletElement.currency,
-                        quantity=quantityToSell,
-                        price=price,
-                        created_timestamp = datetime.datetime.now()
-                        )
+        if(quantityToSell < walletElement.quantity or math.isclose(quantityToSell, walletElement.quantity)):
+            pollToCreate = \
+                Poll.objects.create(
+                    user=user,
+                    currency=walletElement.currency,
+                    quantity=quantityToSell,
+                    price=price,
+                    created_timestamp = datetime.datetime.now()
+                    )
 
-                if(math.isclose(quantityToSell, walletElement.quantity)):
-                    walletElement.delete()
-
-                else:
-                    walletElement.quantity -= quantityToSell
-                    walletElement.save()
-
-                serializer.save()
-                return Response({"message": "Success"})
+            if(math.isclose(quantityToSell, walletElement.quantity)):
+                walletElement.delete()
 
             else:
-                return Response({"message": "You are trying to sell more currency than you own"})
+                walletElement.quantity -= quantityToSell
+                walletElement.save()
 
-        return Response(serializer.errors)
+            return Response({"message": "Success"})
+
+        else:
+            return Response({"message": "You are trying to sell more currency than you own"})
 
 
 class PollList(generics.ListAPIView):
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
 
-    def get(self, request):
-        polls = self.get_queryset()
+    def get(self, request, id=""):
+        if id != "":
+            user = User.objects.get(id=id)
+            try:
+                polls = Poll.objects.filter(user=user)
+            except Poll.DoesNotExist as e:
+                return Response({"message": "No"})
+
+            serializer = PollSerializer(polls, many=True)
+            return render(request, 'mine.html', {'polls': serializer.data})
+
+        else:
+            polls = self.get_queryset()
+
         serializer = PollSerializer(polls, many=True)
         return render(request, 'offers.html', {'polls': serializer.data})
 

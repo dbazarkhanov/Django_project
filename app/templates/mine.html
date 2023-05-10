@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My offers</title>
+    <script
+    src="https://kit.fontawesome.com/1935d064dd.js"
+    crossorigin="anonymous"
+  ></script>
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mine.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-identity">
+            <img src="images/1.png" alt="logo">
+            <h1><a href="#">CryptoTracker</a></h1>
+        </div>
+        <nav class="site-navigation">
+            <ul class="nav">
+                <li><a href="#">Offers</a></li>
+                <li><a href="#">Portfolio</a></li>
+                <li><a href="#">Currencies</a></li>
+                <li><a href="#">Log out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="cont">
+        <h1 style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">My offers</h1>
+        <table>
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Quantity</td>
+                <td>Price</td>
+                <td>Time</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for i in polls %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.currency.name }}</td>
+                <td>{{ i.quantity }}</td>
+                <td>{{ i.price }}</td>
+                <td>{{ i.created_timestamp }} (GMT+6)</td>
+                <td><button class="first" onclick="deletePoll('{{ i.id }}')">Cancel</button></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  </div>
+
+    <script type="text/javascript">window.CSRF_TOKEN = "{{ csrf_token }}"; </script> 
+    <script src="{% static 'js/mine.js' %}"></script>
+
+</body>
+</html>

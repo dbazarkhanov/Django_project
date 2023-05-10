@@ -40,11 +40,14 @@ class WalletElement(models.Model):
     def __str__(self):
         return f"Элемент кошелька {self.user.username}, валюта {self.currency.name}"
 
+    def sum(self):
+        return float(self.currency.price) * float(self.quantity)
+
 
 #Stores historical data (all transactions of all users)
 class Transaction(models.Model):
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='user')
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='to')
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='seller')
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='buyer')
     currency = models.ForeignKey(to=Currency, on_delete=models.CASCADE,)
     quantity = models.FloatField(default=0)
     price = models.FloatField(default=0)

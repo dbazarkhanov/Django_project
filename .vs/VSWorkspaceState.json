@@ -3,14 +3,14 @@
     "",
     "\\app",
     "\\app\\static",
+    "\\app\\static\\css",
     "\\app\\static\\js",
-    "\\app\\templates",
-    "\\project",
     "\\user",
+    "\\user\\migrations\\__pycache__",
     "\\user\\static",
     "\\user\\static\\css",
     "\\user\\templates"
   ],
-  "SelectedNode": "\\app\\static\\js\\offers.js",
+  "SelectedNode": "\\user\\static\\js\\profile.js",
   "PreviewInSolutionExplorer": false
 }

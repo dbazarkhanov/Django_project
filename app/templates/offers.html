@@ -29,33 +29,37 @@
         </nav>
     </header>
 
-    <div class="cont">
-        <h1>Current offers</h1>
-      <table>
-        <thead>
-            <tr>
-                <td>ID</td>
-                <td>Name</td>
-                <td>Quantity</td>
-                <td>Price</td>
-                <td>Time</td>
-                <td></td>
-            </tr>
-        </thead>
-        <tbody>
-        {% for i in polls %}
-            <tr>
-                <td>{{ i.id }}</td>
-                <td>{{ i.currency.name }}</td>
-                <td>{{ i.quantity }}</td>
-                <td>{{ i.price }}</td>
-                <td>{{ i.created_timestamp }} (GMT+6)</td>
-                <td><button class="first" onclick="openPoll({{ i.id }}, '{{ i.currency.name }}', {{ i.quantity }}, {{ i.price }})">Buy</button></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-  </div>
+    {% if polls %}
+        <div class="cont">
+            <h1>Current offers</h1>
+          <table>
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Name</td>
+                    <td>Quantity</td>
+                    <td>Price</td>
+                    <td>Time</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for i in polls %}
+                <tr>
+                    <td>{{ i.id }}</td>
+                    <td>{{ i.currency.name }}</td>
+                    <td>{{ i.quantity }}</td>
+                    <td>{{ i.price }}</td>
+                    <td>{{ i.created_timestamp }} (GMT+6)</td>
+                    <td><button class="first" onclick="openPoll({{ i.id }}, '{{ i.currency.name }}', {{ i.quantity }}, {{ i.price }})">Buy</button></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    {% else %}
+        <h3>No offers are available currently...</h3>
+    {% endif %}
 
   <div class="modal">
     <div class="modal-content">

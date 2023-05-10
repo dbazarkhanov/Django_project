@@ -5,8 +5,10 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserLoginForm, UserProfileForm
 # from rest_framework import generics
-# from .models import User
-# from .serializers import UserSerializer
+from .models import User
+import sys
+sys.path.append(r'/Users/araimbayeva/Desktop/Django/DjangoProject/app/')
+from app.models import WalletElement
 
 
 def register(request):
@@ -47,9 +49,18 @@ def profile(request):
             form.save()
             return HttpResponseRedirect(reverse('user:profile'))
     else:
+        user = request.user
+        userInfo = User.objects.get(id=user.id)
+        investments = WalletElement.objects.filter(user=user)
+        investments_sum = 0
+
+        for i in investments:
+            investments_sum += i.sum()
+        investments_sum = round(investments_sum, 3)
+
         form = UserProfileForm(instance=request.user)
 
-    context = {'form': form,}
+    context = {'form': form, 'userInfo': userInfo, 'investments': investments, 'sum': investments_sum}
     return render(request, 'profile.html', context)
 
 # class UserList(generics.ListAPIView):

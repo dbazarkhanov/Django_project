@@ -5,17 +5,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <title>User Profile</title>
+    <script
+    src="https://kit.fontawesome.com/1935d064dd.js"
+    crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'profile.css' %}">
-
-    
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 </head>
 <body>
     <header class="site-header">
         <div class="site-identity">
-            <img src="images/1.png" alt="logo">
+            <img src="/media/1.png" alt="logo">
             <h1><a href="#">CryptoTracker</a></h1>
         </div>
         <nav class="site-navigation">
@@ -31,28 +33,39 @@
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
             <div class="prof col-md-3 border-right">
-                <div class="d-flex flex-column align-items-center text-center py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">Edogaru</span><span class="text-black-50">edogaru@mail.com.my</span><span> </span></div>
+                <div class="d-flex flex-column align-items-center text-center py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">{{ userInfo.first_name }} {{ userInfo.last_name }}</span><span class="text-black-50">{{ userInfo.email }}</span><span> </span></div>
             </div>
             <div class="col-md-5 border-right">
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="text-right">Profile Settings</h4>
                     </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value=""></div>
-                        <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="" placeholder="surname"></div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12"><label class="labels">login</label><input type="text" class="form-control" placeholder="enter login" value=""></div>
-                        <div class="col-md-12"><label class="labels">Password</label><input type="text" class="form-control" placeholder="enter password" value=""></div>
-                        <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="enter phone number" value=""></div>
-                        <div class="col-md-12"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="enter email id" value=""></div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
-                        <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
-                    </div>
-                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+                    <form action="{% url 'user:profile' %}" method="post">
+                    {% csrf_token %}
+                        <div class="row mt-2">
+                            <div class="col-md-6"><label class="labels" for="form.first_name.id_for_labele">First name</label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="col-md-6"><label class="labels" for="form.last_name.id_for_label">Last name</label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12" style="margin-top: 10px;"><label class="labels" for="form.username.id_for_label">Username</label>
+                            {{ form.username }}
+                            </div>
+                            <div class="col-md-12" style="margin-top: 10px;"><label class="labels" for="form.email.id_for_label">Email</label>
+                            {{ form.email }}
+                            </div>
+                        </div>
+                        <!--
+                        <div class="row mt-3">
+                            <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
+                            <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
+                        </div>
+                        -->
+                        <div class="mt-5 text-center"><input class="btn btn-primary profile-button" type="submit" value="Save settings"></div>
+                    </form>
                 </div>
             </div>
             <div class="col-md-4">
@@ -60,34 +73,75 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="text-right">Portfolio</h4>
                     </div><br>
-                    <div class="col-md-12"><label class="labels">Your balance</label><div class="form-control">400</div></div> <br>
-                    <div class="col-md-12"><label class="labels">Your investments</label><div class="form-control">500</div></div>
+                    <div class="col-md-12"><label class="labels">Your balance</label><div class="form-control">${{ userInfo.balance }}</div></div> <br>
+                    <div class="col-md-12"><label class="labels">Your investments</label><div class="form-control">${{ sum }}</div></div>
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <td>Name</td>
-                                <td>Quantity</td>
-                                <td>Price</td>
-                                <td> </td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>BNB</td>
-                                <td>1</td>
-                                <td>469</td>
-                                <td><button class="first">sell</button></td>        
-                            </tr>
-                        </tbody>
-                    </table>
+                    {% if investments %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Quantity</td>
+                                    <td>Price (for 1 currency)</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in investments %}
+                                <tr>
+                                    <td>{{ i.currency.name }}</td>
+                                    <td>{{ i.quantity|floatformat:5 }}</td>
+                                    <td>${{ i.currency.price }}</td>
+                                    <td><button class="first" onclick="openPoll({{ i.id }}, '{{ i.currency.name }}', {{ i.quantity }}, {{ i.currency.price }})">
+                                    Place an offer
+                                    </button></td>        
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <h4 style="margin-top: 10px;">Your wallet is empty...</h4>
+                    {% endif%}
+                    
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="left">
+        <h2 class="currencyName"></h2>
+        <p class="currencyPrice">Current market price: $</p>
+        <p class="currencyQuantity">You have: </p>
+        <p>Payment Time Limit: 15 minutes</p>
+      </div>
+      <div class="right">
+        <form action="#">
+            <div class="input-box">
+                <label class="labels">My price (for 1 currency)</label>
+                <input type="number" class="my-price" required min="0.5" step="0.5">
+            </div>
+            <div class="input-box">
+                <label class="labels">Quantity to sell</label>
+                <input type="number" class="quantity-to-sell" required step="0.00001"> 
+            </div>
+            <div class="input-box">
+                <label class="labels">Total sum earned (when offer is accepted)</label>
+                <input type="number" class="total-sum" readonly>
+            </div>
+          </form>
+      </div>
+      <h5 class="response" style="color:red; margin-top: 10px;"></h5>
+      <div class="sell">
+        <button class="first">Place an offer</button>
+      </div>
     </div>
-    </div>
-    
-    
+  </div>
+  
+    <script type="text/javascript" src="{% static 'js/profile.js' %}"></script>
+    <script type="text/javascript">window.CSRF_TOKEN = "{{ csrf_token }}"; </script> 
+
 </body>
 </html>
