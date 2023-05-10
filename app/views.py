@@ -1,3 +1,4 @@
+from urllib import request
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -241,7 +242,8 @@ class PollList(generics.ListAPIView):
             return render(request, 'mine.html', {'polls': serializer.data})
 
         else:
-            polls = self.get_queryset()
+            user = request.user
+            polls = self.get_queryset().exclude(user=user.id)
 
         serializer = PollSerializer(polls, many=True)
         return render(request, 'offers.html', {'polls': serializer.data})

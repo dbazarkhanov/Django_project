@@ -10,12 +10,10 @@ urlpatterns = [
     path('api/currencies/', CurrencyList.as_view(), name='currency_api'),
     path('currencies/', CurrencyView.as_view(), name='crypt'),
     path('currencies/<int:id>/', CurrencyDetail.as_view(), name='b_details'),
-    # path('transactions/', TransactionList.as_view(), name='mine'),
     path('offers/', PollList.as_view(), name='offers'),
     path('api/currencies/', CurrencyList.as_view(), name='currency_list'),
     path('currencies/', CurrencyView.as_view(), name='currency-list-view'),
     path('currencies/<int:id>/', CurrencyDetail.as_view(), name='currency-detail'),
-    path('transactions/', TransactionList.as_view(), name='transaction-list'),
     path('polls/', PollList.as_view(), name='offers'),
     path('polls/<int:id>/', PollList.as_view(), name='my-offers'),
 
